@@ -8,17 +8,17 @@ A terminal dashboard for monitoring your GitHub PRs across multiple repos, built
 
 ┃ interop-be-monorepo (4)
 │
-│   ╭─ PIN-9237-async-exchange-descriptor-fields * ──────────╮
-│   │ PR #3097 → feature/PIN-92…  Ready to merge             │
-│   │ feat: add async exchange descriptor fields (PIN-9237)   │
-│   │ ████████████ 24/24  ✓ DenisLa…  +976 -14 46f  8h ago   │
-│   ╰────────────────────────────────────────────────────────╯
+│   ╭─ PIN-9237-async-exchange-descriptor-fields * ──────────────╮
+│   │ AUTHOR PR #3097 → feature/PIN-92…  Ready to merge         │
+│   │ feat: add async exchange descriptor fields (PIN-9237)      │
+│   │ ████████████ 24/24  ✓ DenisLa…  +976 -14 46f  8h ago      │
+│   ╰──────────────────────────────────────────────────────────╯
 │
-│   ╭─ PIN-9239_add-check-on-publish-descriptor * ───────────╮
-│   │ PR #3099 → PIN-9237-async…  Draft                       │
-│   │ feat: add async exchange validation checks (PIN-9239)   │
-│   │ ████████████ 24/24  +499 -2 7f  8h ago                  │
-│   ╰────────────────────────────────────────────────────────╯
+│   ╭─ PIN-9239_add-check-on-publish-descriptor * ──────────────╮
+│   │ REVIEWER PR #3099 → PIN-9237-async…  Draft                 │
+│   │ feat: add async exchange validation checks (PIN-9239)      │
+│   │ ████████████ 24/24  +499 -2 7f  8h ago                     │
+│   ╰──────────────────────────────────────────────────────────╯
 
 j/k navigate  l/Enter switch  n new  x remove  o open PR
 y copy  u update  g/G top/end  Tab groups  / filter  r refresh  q quit
@@ -67,6 +67,7 @@ Run it from anywhere — it scans your configured project directories for git wo
 ## Features
 
 - **Multi-repo dashboard** — monitors PRs across all your projects, grouped by repo
+- **Author/Reviewer badge** — each PR shows `AUTHOR` or `REVIEWER` so you instantly know your role
 - **PR status at a glance** — Ready to merge, Draft, Checks failing, Changes requested, Merge conflicts, Needs update
 - **CI checks bar** — visual progress bar with pass/fail/pending counts
 - **Reviewer summary** — shows approvals and change requests inline

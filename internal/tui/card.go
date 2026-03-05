@@ -188,7 +188,15 @@ func renderPRLine(pr *github.PRInfo, maxWidth int) string {
 		baseStyle = checkFailureStyle
 		baseLabel = "→ " + baseBranch + " ✘"
 	}
-	line1 := prNumberStyle.Render(fmt.Sprintf("PR #%d", pr.Number)) + " " + baseStyle.Render(baseLabel) + "  " + statusStyle.Render(status)
+	var roleBadge string
+	switch pr.Role {
+	case github.RoleAuthor:
+		roleBadge = authorBadgeStyle.Render("AUTHOR") + " "
+	case github.RoleReviewer:
+		roleBadge = reviewerBadgeStyle.Render("REVIEWER") + " "
+	}
+
+	line1 := roleBadge + prNumberStyle.Render(fmt.Sprintf("PR #%d", pr.Number)) + " " + baseStyle.Render(baseLabel) + "  " + statusStyle.Render(status)
 
 	// Line 1.5: PR title (truncated to fit)
 	var titleLine string

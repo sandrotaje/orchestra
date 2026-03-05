@@ -35,6 +35,13 @@ type DiffStat struct {
 	Files     int
 }
 
+type PRRole string
+
+const (
+	RoleAuthor   PRRole = "AUTHOR"
+	RoleReviewer PRRole = "REVIEWER"
+)
+
 type PRInfo struct {
 	Number           int
 	Title            string
@@ -43,6 +50,8 @@ type PRInfo struct {
 	Draft            bool
 	Base             string
 	Head             string
+	Author           string
+	Role             PRRole
 	Checks           []Check
 	Reviews          []Review
 	DiffStat         DiffStat

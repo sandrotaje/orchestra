@@ -59,6 +59,16 @@ var (
 
 	noPRStyle = lipgloss.NewStyle().Foreground(colorOverlay).Italic(true)
 
+	authorBadgeStyle = lipgloss.NewStyle().
+				Bold(true).
+				Foreground(colorBase).
+				Background(colorMauve)
+
+	reviewerBadgeStyle = lipgloss.NewStyle().
+				Bold(true).
+				Foreground(colorBase).
+				Background(colorBlue)
+
 	confirmStyle = lipgloss.NewStyle().
 			Foreground(colorYellow).
 			Bold(true).

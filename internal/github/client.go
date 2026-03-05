@@ -6,7 +6,25 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync"
 )
+
+var (
+	currentUserOnce sync.Once
+	currentUserName string
+)
+
+// GetCurrentUser returns the authenticated GitHub username, cached after first call.
+func GetCurrentUser() string {
+	currentUserOnce.Do(func() {
+		cmd := exec.Command("gh", "api", "user", "--jq", ".login")
+		out, err := cmd.Output()
+		if err == nil {
+			currentUserName = strings.TrimSpace(string(out))
+		}
+	})
+	return currentUserName
+}
 
 // GetPRForBranch gets PR info for a specific branch in a specific repo directory.
 func GetPRForBranch(repoDir, branch string) (*PRInfo, error) {
@@ -14,7 +32,7 @@ func GetPRForBranch(repoDir, branch string) (*PRInfo, error) {
 		return nil, fmt.Errorf("gh CLI not found")
 	}
 
-	fields := "number,title,url,state,isDraft,baseRefName,headRefName,additions,deletions,changedFiles,mergeable,mergeStateStatus,reviewDecision,updatedAt"
+	fields := "number,title,url,state,isDraft,baseRefName,headRefName,additions,deletions,changedFiles,mergeable,mergeStateStatus,reviewDecision,updatedAt,author"
 
 	// Try open PRs first, then fall back to merged/closed
 	prJSON, err := runGH(repoDir, "pr", "view", branch, "--json", fields)
@@ -57,10 +75,18 @@ func GetPRForBranch(repoDir, branch string) (*PRInfo, error) {
 		MergeStateStatus string `json:"mergeStateStatus"`
 		ReviewDecision   string `json:"reviewDecision"`
 		UpdatedAt        string `json:"updatedAt"`
+		Author           struct {
+			Login string `json:"login"`
+		} `json:"author"`
 	}
 
 	if err := json.Unmarshal([]byte(prJSON), &prData); err != nil {
 		return nil, fmt.Errorf("parse PR data: %w", err)
+	}
+
+	role := RoleReviewer
+	if currentUser := GetCurrentUser(); currentUser != "" && strings.EqualFold(currentUser, prData.Author.Login) {
+		role = RoleAuthor
 	}
 
 	pr := &PRInfo{
@@ -71,6 +97,8 @@ func GetPRForBranch(repoDir, branch string) (*PRInfo, error) {
 		Draft:          prData.IsDraft,
 		Base:           prData.BaseRefName,
 		Head:           prData.HeadRefName,
+		Author:         prData.Author.Login,
+		Role:           role,
 		Mergeable:        prData.Mergeable,
 		MergeStateStatus: prData.MergeStateStatus,
 		ReviewDecision:   prData.ReviewDecision,
